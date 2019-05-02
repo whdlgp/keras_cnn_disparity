@@ -50,6 +50,7 @@ train_disp_path = os.path.join(train_set_path,'disparity')
 train_left_path = os.path.join(train_set_path,'left')
 train_right_path = os.path.join(train_set_path,'right')
 
+
 # Load image from folder
 def load_images_from_folder(folder):
     all_images = []
@@ -60,6 +61,7 @@ def load_images_from_folder(folder):
         img = img/255
         all_images.append(img)
     return np.array(all_images)
+
 
 def disparity_cnn_model(input_shape):
     shape=(None, input_shape[1], input_shape[2], input_shape[3])
@@ -106,13 +108,22 @@ def disparity_cnn_model(input_shape):
 
     return model
 
+
 # Load train and test set from folder path
+print('Load train_left')
 train_left = load_images_from_folder(train_left_path)
+print('Load train_right')
 train_right = load_images_from_folder(train_right_path)
+print('Load train_disp')
 train_disp = load_images_from_folder(train_disp_path)
+train_disp = np.expand_dims(train_disp, axis=3)
+print('Load test_left')
 test_left = load_images_from_folder(test_left_path)
+print('Load test_right')
 test_right = load_images_from_folder(test_right_path)
+print('Load test_disp')
 test_disp = load_images_from_folder(test_disp_path)
+test_disp = np.expand_dims(test_disp, axis=3)
 
 print(train_left.shape)
 print(train_right.shape)
@@ -126,12 +137,11 @@ checkpoint = ModelCheckpoint(filepath = os.path.join(checkpoint_path, 'checkpoin
                              save_weights_only = True,
                              verbose = 1,
                              save_best_only = False)
-model.compile(loss=keras.losses.categorical_crossentropy,
-              optimizer=keras.optimizers.Adadelta(),
-              metrics=['accuracy'])
+model.compile(loss='binary_crossentropy',
+              optimizer=keras.optimizers.Adam())
 model.fit([train_left, train_right],
           train_disp,
-          epoch = 1,
+          epochs = 1,
           batch_size = 4,
           shuffle = True,
           callbacks=[checkpoint])

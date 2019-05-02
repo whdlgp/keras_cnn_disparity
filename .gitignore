@@ -1,4 +1,4 @@
-
+﻿
 # Created by https://www.gitignore.io/api/images,python,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=images,python,visualstudiocode
 
@@ -200,3 +200,9 @@ dmypy.json
 .history
 
 # End of https://www.gitignore.io/api/images,python,visualstudiocode
+
+# Pycham
+.idea/*
+
+# dataset zip file
+*.zip
