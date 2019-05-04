@@ -207,5 +207,4 @@ dmypy.json
 *.zip
 
 # test result
-!first_result/*.png
-
+!/first_result/

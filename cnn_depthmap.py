@@ -10,7 +10,7 @@ from keras.layers import ZeroPadding2D, BatchNormalization, Activation
 from keras.layers import UpSampling2D 
 from keras.layers import concatenate
 from keras.optimizers import RMSprop
-from keras.callbacks import ModelCheckpoint, LambdaCallback
+from keras.callbacks import ModelCheckpoint, LambdaCallback, CSVLogger
 from keras.models import load_model, Model
 from keras.layers.pooling import MaxPooling2D
 from keras.utils import plot_model
@@ -34,6 +34,11 @@ config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.7 #try various numbers here
 set_session(tf.Session(config=config))
+
+# setup for learning
+EPOCH = 50
+BATCH_SIZE = 4
+LR = 0.0006
 
 # setup data path for train and test
 data_set_path = 'data_set'
@@ -132,16 +137,40 @@ print(test_left.shape)
 print(test_right.shape)
 print(test_disp.shape)
 
+# build model
 model = disparity_cnn_model(train_left.shape)
+model.compile(loss='binary_crossentropy',
+              optimizer=keras.optimizers.Adam(lr=LR))
+
+# Add Learning option and learning
 checkpoint = ModelCheckpoint(filepath = os.path.join(checkpoint_path, 'checkpoint.h5'),
                              save_weights_only = True,
                              verbose = 1,
                              save_best_only = False)
-model.compile(loss='binary_crossentropy',
-              optimizer=keras.optimizers.Adam())
-model.fit([train_left, train_right],
-          train_disp,
-          epochs = 1,
-          batch_size = 4,
-          shuffle = True,
-          callbacks=[checkpoint])
+logger = CSVLogger(filename='log.csv')
+history = model.fit([train_left, train_right],
+                    train_disp,
+                    epochs = EPOCH,
+                    batch_size = BATCH_SIZE,
+                    shuffle = True,
+                    callbacks=[checkpoint, logger])
+
+# draw and save result
+y_loss = history.history['loss']
+x_len = np.arange(len(y_loss))
+plt.plot(x_len, y_loss, marker='.', c='blue', label="Train-set Loss")
+
+plt.legend(loc='upper right')
+plt.grid()
+plt.xlabel('epoch')
+plt.ylabel('loss')
+plt.savefig('train_loss.png')
+plt.cla()
+
+# Test with test data set and save result
+score = model.evaluate([test_left, test_right], test_disp, verbose=0)
+
+f = open("test_result.txt", 'w')
+print('Test loss:', score, file = f)
+print('', file = f)
+f.close()
