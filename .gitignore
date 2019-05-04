@@ -207,4 +207,5 @@ dmypy.json
 *.zip
 
 # test result
-!/first_result/
+!/first_result/model.png
+!/first_result/train_loss.png
