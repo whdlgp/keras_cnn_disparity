@@ -26,7 +26,7 @@ Universidad Autnoma de Ciudad Jurez @alumnos.uacj.mx
 http://www.uacj.mx/Paginas/Default.aspx
 ```
 
-## Planed
+## Plane
 ### Implement CNN with disparity estimation
 * Implement proposed CNN in paper with Keras
 ![](docs/4.png)
