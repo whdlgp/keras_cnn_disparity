@@ -41,7 +41,7 @@ BATCH_SIZE = 4
 LR = 0.0006
 
 # setup data path for train and test
-data_set_path = 'data_set'
+data_set_path = os.path.join('..', '/data_set')
 checkpoint_path = 'check_point'
 
 test_set_path = os.path.join(data_set_path,'test')
@@ -113,7 +113,6 @@ def disparity_cnn_model(input_shape):
 
     return model
 
-
 # Load train and test set from folder path
 print('Load train_left')
 train_left = load_images_from_folder(train_left_path)
@@ -138,7 +137,7 @@ print(test_right.shape)
 print(test_disp.shape)
 
 # build model
-model = disparity_cnn_model(train_left.shape)
+model = disparity_cnn_model(test_left.shape)
 model.compile(loss='binary_crossentropy',
               optimizer=keras.optimizers.Adam(lr=LR))
 
