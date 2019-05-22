@@ -41,7 +41,7 @@ BATCH_SIZE = 4
 LR = 0.0006
 
 # setup data path for train and test
-data_set_path = os.path.join('..', '/data_set')
+data_set_path = os.path.join('..', 'data_set')
 checkpoint_path = 'check_point'
 
 test_set_path = os.path.join(data_set_path,'test')
