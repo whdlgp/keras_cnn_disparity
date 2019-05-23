@@ -209,3 +209,4 @@ dmypy.json
 # test result
 !/cnn/*.png
 !/cnn_batchnormalize/*.png
+!/cnn_mixed/*.png
