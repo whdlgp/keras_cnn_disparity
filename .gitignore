@@ -210,3 +210,4 @@ dmypy.json
 !/cnn/*.png
 !/cnn_batchnormalize/*.png
 !/cnn_mixed/*.png
+!/cnn_mixed_2/*.png
